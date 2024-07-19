@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+    <div>
+        <nav class="">
+            <div class="flex justify-between">
+                <a href="{{ path('app_home') }}"> <img src="{{ asset('img/logo-ski.png') }}" alt="Logo Ski Resorts" class="w-24 md:w-32 lg:w-40 xl:w-48"></a>
+                    
+                <div class="flex justify-between items-center">
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}">Connexion</a>
+                        <a href="{{ path('app_register') }}">Inscription</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_admin') }}">Tableau de bord</a>
+                    {% endif %}
+                </div>
+                </div>
+                <div class="pb-[5px]">
+                <a href="{{ path('app_home') }}">Catégories</a>
+                <a href="{{ path('show_topic') }}">Sujets</a>
+                <a href="{{ path('show_post') }}">Commentaires</a>
+            </div>
+        </nav>    
+    </div>
+
+<div class="bg-cover h-80 flex flex-col justify-center items-center" style="background-image: url('{{ asset('img/banner01.jpg') }}');"> 
+    <h1 class="mb-8 col-span-full tracking-custom">Inscription</h1>
+</div>
+
+<div class="mx-auto max-w-screen-lg my-10 bg-white shadow-lg p-6 flex flex-col">
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.pseudo) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Mot de passe'
+        }) }}
+        {{ form_row(registrationForm.agreeTerms, {
+        'label': "Cochez cette case pour accepter <a href='#'>les conditions d'utilisations</a>",
+        'attr': {'class': 'inputRegisterTerms'},
+        'label_html': true
+    }) }}
+
+    <button class="btn btn-lg btn-primary  m-50" type="submit">
+    Valider
+</button>
+    {{ form_end(registrationForm) }}
+
+</div>
+{% endblock %}

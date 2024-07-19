@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord Admin {% endblock %}
+
+{% block body %}
+
+<div>
+    <nav class="">
+        <div class="flex justify-between">
+            <a href="{{ path('app_home') }}"> <img src="{{ asset('img/logo-ski.png') }}" alt="Logo Ski Resorts" class="w-24 md:w-32 lg:w-40 xl:w-48"></a>
+                
+            <div class="flex justify-between items-center">
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}">Connexion</a>
+                    <a href="{{ path('app_register') }}">Inscription</a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_admin') }}">Tableau de bord</a>
+                {% endif %}
+            </div>
+         </div>
+         <div class="pb-[5px]">
+            <a href="{{ path('app_home') }}">Catégories</a>
+            <a href="{{ path('show_topic') }}">Sujets</a>
+            <a href="{{ path('show_post') }}">Commentaires</a>
+        </div>
+    </nav>    
+</div>
+
+    <div class="bg-cover h-80 flex flex-col justify-center items-center" style="background-image: url('{{ asset('img/banner01.jpg') }}');"> 
+        <h1 class="mb-8 col-span-full tracking-custom">Tableau de board Admin</h1>
+    </div>
+
+    <div class="flex my-10 mx-50 ml-20">
+    {% if app.user %}
+        <button class="btn" id="add-topic-button"> <a href="{{ path('add_category') }}"> Ajouter une catégorie </a></button>
+    {% endif %}
+    </div>
+
+    <div class="mx-auto max-w-screen-lg grid grid-cols-2 gap-10 my-10">
+        {% for category in categories %}
+       
+            <div class="bg-white p-4 shadow-md hover:shadow-xl transition duration-300">
+                <a href="{{ path('app_category', {'categoryId': category.id}) }}" class=" px-0 cursor-pointer">
+                    <div class="mb-4 aspect-w-2 aspect-h-3">
+                        <img src="{{ asset('uploads/' ~ category.picture) }}" alt="{{ category.name }}" class="object-cover w-full h-full">
+                    </div>
+                    <h2 class="py-5">{{ category.name }}</h2> 
+                </a>
+
+                <div>
+                    <a href="{{ path('delete_category', {'id': category.id}) }}"> <i class="fa-regular fa-trash-can"></i></a>
+                </div>
+            </div>
+        
+
+
+
+        {% endfor %}
+    </div>
+
+{% endblock %}

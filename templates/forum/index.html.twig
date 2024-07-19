@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page des topics{% endblock %}
+
+{% block body %}
+
+<div>
+    <nav class="">
+        <div class="flex justify-between">
+            <a href="{{ path('app_home') }}"> <img src="{{ asset('img/logo-ski.png') }}" alt="Logo Ski Resorts" class="w-24 md:w-32 lg:w-40 xl:w-48"></a>
+                
+            <div class="flex justify-between items-center">
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}">Connexion</a>
+                    <a href="{{ path('app_register') }}">Inscription</a>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_admin') }}">Tableau de bord</a>
+                {% endif %}
+            </div>
+         </div>
+         <div class="pb-[5px]">
+            <a href="{{ path('app_home') }}">Catégories</a>
+            <a href="{{ path('show_topic') }}">Sujets</a>
+            <a href="{{ path('show_post') }}">Commentaires</a>
+        </div>
+    </nav>    
+</div>
+
+<div class="relative bg-cover bg-center h-80" style="background-image: url('{{ asset('uploads/' ~ category.picture) }}');">
+    <div class="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50">
+        <h1 class="mb-8 col-span-full tracking-custom">{{ category.name }}</h1>
+    </div>
+</div>
+
+<div class="flex my-10 mx-50 ml-20">
+  <button class="btn mr-10"><a href="{{ path('app_home') }}">Retour</a></button>
+
+{% if app.user %}
+    <button class="btn" id="add-topic-button"> Ajouter un sujet </button>
+{% endif %}
+</div>
+
+<div id="add-topic-form" style="display: none;">
+  {{ form_start(formAddTopic) }}
+      {{ form_widget(formAddTopic) }}
+  {{ form_end(formAddTopic) }}
+</div>
+
+<div class="mx-auto max-w-screen-lg my-10 bg-white shadow-lg p-6">
+  {% for topic in topics %}
+      <div class="mb-6">
+          <div class="flex justify-between">
+              <div class="flex flex-col">
+                  <h3 class="text-xl font-bold mb-2">
+                      <a href="{{ path('app_topic', {'categoryId': category.id, 'topicId': topic.id}) }}" class="text-blue-900 hover:text-blue-dark pr-0 pl-0">{{ topic.title }}</a>
+                  </h3>
+                  <p class="text-sm text-gray-600">Posté par {{ topic.user.pseudo }}</p>
+              </div>
+              <p class="text-sm text-gray-600">{{ topic.dateCreationTopic|date('d-m-Y') }}</p>
+            
+          </div>
+          <div>
+            <p class="text-sm text-gray-600 inline-block pr-5"><i class="fa-regular fa-message"></i> {{ numberPosts[topic.id] }}</p>
+                {% if is_granted('ROLE_ADMIN') or app.user == topic.user %}
+                    <a class="p-0" href="{{ path('delete_topic', {'categoryId': category.id, 'topicId': topic.id}) }}"> <i class="fa-regular fa-trash-can"></i></a>
+                {% endif %}
+            </div>  
+          <hr class="my-4 border-gray-300">
+      </div>
+  {% endfor %}
+</div>
+
+{% if not app.user %}
+    <div class="italic border border-gray-300 max-w-screen-lg mx-auto p-4 text-center mb-5">
+        <p class="text-center">Vous devez vous connecter pour ajouter un sujet</p>
+    </div>
+{% endif %}
+
+
+
+{% endblock %}

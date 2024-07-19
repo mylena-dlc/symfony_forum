@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page d'accueil Forum{% endblock %}
+
+{% block body %}
+
+    <div>
+        <nav class="">
+            <div class="flex justify-between">
+                <a href="{{ path('app_home') }}"> <img src="{{ asset('img/logo-ski.png') }}" alt="Logo Ski Resorts" class="w-24 md:w-32 lg:w-40 xl:w-48"></a>
+                    
+                <div class="flex justify-between items-center">
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}">Connexion</a>
+                        <a href="{{ path('app_register') }}">Inscription</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_admin') }}">Tableau de bord</a>
+                    {% endif %}
+                </div>
+             </div>
+             <div class="pb-[5px]">
+                <a href="{{ path('app_home') }}">Catégories</a>
+                <a href="{{ path('show_topic') }}">Sujets</a>
+                <a href="{{ path('show_post') }}">Commentaires</a>
+            </div>
+        </nav>    
+    </div>
+
+    <div class="bg-cover h-80 flex flex-col justify-center items-center" style="background-image: url('{{ asset('img/banner01.jpg') }}');"> 
+        <h1 class="mb-8 col-span-full tracking-custom">Ski Forum</h1>
+        <p class="text-white tracking-custom text-lg text-shadow-custom">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, nam.</p>
+    </div>
+
+    <div class="mx-auto max-w-screen-lg grid grid-cols-2 gap-10 my-10">
+
+    <div class="col-span-2 bg-white p-4 shadow-md hover:shadow-xl transition duration-300">
+        <h3><i class="fa-solid fa-cloud-sun"></i> Météo</h3>
+        <form id="form">
+            <label for="cityName">Nom de la ville  :</label>
+            <input type="text" id="cityName" name="cityName" class="border border-gray p-5" required>
+            <button type="submit" class="btn block mt-5">Obtenir la météo</button>
+        </form>
+        <section id="meteo"></section>
+    </div>
+
+        <div class=" col-span-2 bg-white p-4 shadow-md hover:shadow-xl transition duration-300">
+            <h3><i class="fa-solid fa-cloud-sun"></i> Météo des stations</h3>
+        </div>  
+            <section id="meteo-ski-resort" class="col-span-2"></section>
+        
+
+        {% for category in categories %}
+        <a href="{{ path('app_category', {'categoryId': category.id}) }}" class=" px-0 cursor-pointer">
+            <div class="bg-white p-4 shadow-md hover:shadow-xl transition duration-300">
+                <div class="mb-4">
+                    <img src="{{ asset('uploads/' ~ category.picture) }}" alt="{{ category.name }}" class="object-cover aspect-[3/2]">
+                </div>
+            <h2 class="py-5 pr-5 inline">{{ category.name }}</h2> 
+            <p class="inline"><i class="fa-regular fa-comments"></i> {{ nbTopics[category.id] }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout d'une catégorie{% endblock %}
+
+{% block body %}
+
+<div>
+  <nav class="">
+      <div class="flex justify-between">
+          <a href="{{ path('app_home') }}"> <img src="{{ asset('img/logo-ski.png') }}" alt="Logo Ski Resorts" class="w-24 md:w-32 lg:w-40 xl:w-48"></a>
+              
+          <div class="flex justify-between items-center">
+              {% if app.user %}
+                  <a href="{{ path('app_logout') }}">Déconnexion</a>
+              {% else %}
+                  <a href="{{ path('app_login') }}">Connexion</a>
+                  <a href="{{ path('app_register') }}">Inscription</a>
+              {% endif %}
+              {% if is_granted('ROLE_ADMIN') %}
+                  <a href="{{ path('app_admin') }}">Tableau de bord</a>
+              {% endif %}
+          </div>
+       </div>
+       <div class="pb-[5px]">
+          <a href="{{ path('app_home') }}">Catégories</a>
+          <a href="{{ path('show_topic') }}">Sujets</a>
+          <a href="{{ path('show_post') }}">Commentaires</a>
+      </div>
+  </nav>    
+</div>
+
+<div class="bg-cover h-80 flex flex-col justify-center items-center" style="background-image: url('{{ asset('img/banner01.jpg') }}');"> 
+<h1 class="mb-8 col-span-full tracking-custom">Ajout d'une catégorie</h1>
+<p class="text-white tracking-custom text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, nam.</p>
+</div>
+
+
+<div class="mx-auto max-w-screen-lg grid grid-cols-2 gap-10 my-10">
+
+  {{ form_start(formAddCategory) }}
+      {{ form_widget(formAddCategory) }}
+  {{ form_end(formAddCategory) }}
+
+</div>
+
+{% endblock %}

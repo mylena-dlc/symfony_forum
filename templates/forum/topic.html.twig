@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page de détails d'un topic{% endblock %}
+
+{% block body %}
+<div>
+  <nav class="">
+      <div class="flex justify-between">
+          <a href="{{ path('app_home') }}"> <img src="{{ asset('img/logo-ski.png') }}" alt="Logo Ski Resorts" class="w-24 md:w-32 lg:w-40 xl:w-48"></a>
+              
+          <div class="flex justify-between items-center">
+              {% if app.user %}
+                  <a href="{{ path('app_logout') }}">Déconnexion</a>
+              {% else %}
+                  <a href="{{ path('app_login') }}">Connexion</a>
+                  <a href="{{ path('app_register') }}">Inscription</a>
+              {% endif %}
+              {% if is_granted('ROLE_ADMIN') %}
+                  <a href="{{ path('app_admin') }}">Tableau de bord</a>
+              {% endif %}
+          </div>
+       </div>
+       <div class="pb-[5px]">
+          <a href="{{ path('app_home') }}">Catégories</a>
+          <a href="{{ path('show_topic') }}">Sujets</a>
+          <a href="{{ path('show_post') }}">Commentaires</a>
+      </div>
+  </nav>    
+</div>
+
+<div class="relative bg-cover bg-center h-80" style="background-image: url('{{ asset('uploads/' ~ category.picture) }}');">
+    <div class="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50">
+        <h1 class="mb-8 col-span-full tracking-custom">{{ category.name }}</h1>
+        <p class="text-white tracking-custom text-lg"> {{ topic.title }}</p>
+    </div>
+</div>
+
+<div class="flex my-10 mx-50 ml-20">
+  <button class="btn mr-10"><a href="{{ path('app_home') }}">Retour</a></button>
+  {% if app.user %}
+    <button class="btn" id="add-topic-button"> Ajouter un sujet </button>
+  {% endif %}
+</div>
+
+
+<div class="mx-auto max-w-screen-lg my-10 bg-white shadow-lg p-6">
+    {% for post in posts %}
+      <div class="mb-6">
+        <div class="flex justify-between">
+            <div class="flex flex-col">
+              <h3 class="text-xl font-bold"> {{ post.user.pseudo }}</h3>
+              <p class="text-sm text-gray-600"> {{ post.dateCreationPost|date('d-m-Y') }}</p>
+              <p class="mt-2">{{ post.text }}</p>
+            </div>
+
+            {% if is_granted('ROLE_ADMIN') or app.user == topic.user %}
+              <div>
+                  {# <a href="{{ path('delete_topic', {'categoryId': category.id, 'topicId': topic.id}) }}"> <i class="fa-regular fa-trash-can"></i></a> #}
+              </div>  
+            {% endif %}
+
+          <hr class="my-4 border-gray-300">
+        </div>
+      </div>
+    {% endfor %}
+
+{% if not app.user %}
+    <div class="italic border border-gray-300 max-w-screen-lg mx-auto p-4 text-center mb-5">
+        <p class="text-center">Vous devez vous connecter pour ajouter un commentaire</p>
+    </div>
+{% else %}
+
+  <div class="mt-10 flex flex-col justify-between align-center">
+      <h3 class="text-2xl mb-4">Commentaire</h3>
+      <div class="w-full">
+        {{ form_start(formAddPost) }}
+          {{ form_widget(formAddPost, {
+          'attr': {'class': 'w-full border border-gray-400'}
+        }) }}          
+        {{ form_end(formAddPost) }}
+      </div>
+  </div>
+
+{% endif %}
+
+{% endblock %}

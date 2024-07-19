@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        @apply font-sans text-base text-gray-dark bg-gray-light;
+      
+    }
+    nav {
+        @apply bg-white flex flex-col max-w-screen-xl mx-auto;
+    }
+    h1 {
+        @apply text-white text-5xl text-opacity-90; 
+    }
+    h2 {
+        @apply text-2xl text-lg font-medium;
+    }
+    h3 {
+        @apply text-2xl font-medium  py-2.5;
+    }
+    a {
+        @apply py-5 px-10 cursor-pointer;
+    }
+    .btn {
+        @apply bg-blue-dark shadow-2xl text-white px-4 py-2 hover:transition hover:duration-300 hover:opacity-80;
+    }
+    .tracking-custom {
+        letter-spacing: 0.3rem;
+    }
+    
+}
